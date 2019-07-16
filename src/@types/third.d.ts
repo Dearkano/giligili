@@ -1,1 +1,13 @@
 declare module '@/assets/logo.png'
+declare module  'react-swipeable-views-utils'
+declare module 'react-swipeable-views'
+
+declare module '@/assets/home.png'
+declare module '@/assets/news.png'
+declare module '@/assets/chart.png'
+declare module '@/assets/time.png'
+declare module '@/assets/type.png'
+declare module '@/assets/theme.png'
+declare module '@/assets/mode.png'
+declare module '@/assets/search_logo.png'
+declare module '@/assets/bot.png'

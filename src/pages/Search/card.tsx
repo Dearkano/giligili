@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from '@reach/router'
 import { Theme, createStyles, makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,15 +12,20 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
       display: 'flex',
-      marginTop: '25px',
-      height: '150px'
+      height: '150px',
+      width: '100%'
     },
     details: {
       display: 'flex',
       flexDirection: 'column',
+      height: '150px',
+      overflow: 'hidden',
+      paddingTop: '2px',
+      flexGrow: 1
     },
     content: {
       flex: '1 0 auto',
+      paddingTop: '0px'
     },
     cover: {
       minWidth: '150px',
@@ -50,26 +56,28 @@ export default function MediaControlCard({ item }: Props) {
   const theme: any = useTheme();
 
   return (
-    <Card className={classes.card}>
-      <CardActionArea style={{ display: 'flex' }}>
-        <CardMedia
-          className={classes.cover}
-          image={item.cover}
-        />
-        <div className={classes.details}>
-          <CardContent className={classes.content}>
-            <Typography component="h6" variant="h6">
-              {item.name}
-            </Typography>
-            <Typography variant="subtitle2" color="textSecondary">
-              {item.subname}
-            </Typography>
-            <Typography style={{ marginTop: '15px' }} variant="body2" color="textSecondary" component="p">
-              {item.abstract}
-            </Typography>
-          </CardContent>
-        </div>
-      </CardActionArea>
-    </Card>
+    <Link style={{textDecoration: 'none', marginTop: '45px', width: '100%'}} to={`/game/${item._id}`}>
+      <Card className={classes.card}>
+        <CardActionArea style={{ display: 'flex' }}>
+          <CardMedia
+            className={classes.cover}
+            image={item.coverUrl}
+          />
+          <div className={classes.details}>
+            <CardContent className={classes.content}>
+              <Typography component="h5" variant="h5">
+                {item.name}
+              </Typography>
+              <Typography variant="subtitle2" color="textSecondary">
+                {item.subname}
+              </Typography>
+              <Typography style={{ marginTop: '15px' }} variant="body2" color="textSecondary" component="p">
+                {item.introduction}
+              </Typography>
+            </CardContent>
+          </div>
+        </CardActionArea>
+      </Card>
+    </Link>
   );
 }

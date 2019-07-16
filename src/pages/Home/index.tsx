@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import LayoutCenter from '@/components/LayoutCenter'
 import logo from '@/assets/logo.png'
 import Search from '@/components/Search'
+import State from '@/models/state'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default () => {
   const classes = useStyles();
+  useEffect(()=>{
+    State.changeTopSearchState(false)
+  }, [])
   return <LayoutCenter>
     <div className={classes.column}>
 

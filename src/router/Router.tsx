@@ -4,6 +4,7 @@ import { Router, RouteComponentProps, WindowLocation } from '@reach/router'
 
 import Home from '@/pages/Home'
 import Search from '@/pages/Search'
+import Game from '@/pages/Game'
 
 export const Route: React.FC<
   RouteComponentProps & {
@@ -26,6 +27,7 @@ const MyRouter: React.FC<ILocation> = ({ location }) => (
     <Route path="/" component={Home} />
     <Route path="/search/word/:word" component={Search} />
     <Route path="/search/type/:type" component={Search} />
+    <Route path="/game/:id" component={Game} />
   </Router>
 )
 

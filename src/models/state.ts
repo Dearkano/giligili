@@ -1,61 +1,39 @@
 import { Model } from '@/hooks/useModel'
-import { GET } from '@/utils/fetch'
-import { logIn, isLogIn,logOut } from '@/utils/logIn'
+import { IMiniData } from '@giligili'
+import { searchByWord } from '@/services/search'
 interface State {
-  /**
-   * 是否登录
-   */
-  isLogIn: boolean
-  /**
-   * 个人账户信息
-   */
-  myInfo: any | null
+  needTopSearch: boolean
+  word: string
+  content: IMiniData[]
 }
 
 
-class UserModel extends Model<State> {
+class GlobalModel extends Model<State> {
   constructor() {
     super()
-
     this.state = {
-      isLogIn: isLogIn(),
-      myInfo: null,
+      needTopSearch: false,
+      word: '',
+      content:[]
     }
-
-    this.FRESH_INFO()
   }
 
-  LOG_IN = async (username: string, password: string) => {
-    const token = await logIn(username, password)
+  changeTopSearchState = (v: boolean) => {
+    this.setState({ needTopSearch: v })
+  }
 
-    token.fail().succeed(_ => {
-      this.setState({
-        isLogIn: true,
+  setWord = (v: string) => this.setState({ word: v })
+
+  setContent = (v:IMiniData[])=> this.setState({content: v})
+
+  search = async () => {
+      const res = await searchByWord({ word: this.state.word })
+      res.map((data: any) => {
+        this.setContent(data.data.content)
       })
-      this.FRESH_INFO()
-    })
-
-    return token
   }
 
-  LOG_OUT = () => {
-    logOut()
-
-    this.setState({
-      isLogIn: false,
-      myInfo: null,
-    })
-  }
-
-  FRESH_INFO = async () => {
-    if (!this.state.isLogIn) {
-      return
-    }
-
-    //const res = await getMyInfo()
-    //res.map((data:IUser)=>this.setState({myInfo:data}))
-  }
 }
 
-export default new UserModel()
+export default new GlobalModel()
 

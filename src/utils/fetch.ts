@@ -82,7 +82,6 @@ export async function GET<T>(url: string, options: GETOptions = {}) {
 
   const requestInit: RequestInit = {
     headers,
-    credentials: "include",
     ...options.requestInit,
   }
 

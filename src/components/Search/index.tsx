@@ -4,6 +4,10 @@ import { navigate } from '@reach/router'
 import InputBase from '@material-ui/core/InputBase'
 import IconButton from '@material-ui/core/IconButton'
 import SearchIcon from '@material-ui/icons/Search'
+import state from '@/models/state'
+import useModel from '@/hooks/useModel'
+import { searchByWord } from '@/services/search'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     row: {
@@ -66,11 +70,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default () => {
+interface Props {
+  height?: number
+  width?: number
+}
+
+export default ({ height, width }: Props) => {
   const classes = useStyles();
-  const [word, setWord] = React.useState('')
+  const s = useModel(state)
   const onKeyDown = (e: any) => {
-    console.log(e)
     switch (e.keyCode) {
       case 13:
         submit()
@@ -82,19 +90,21 @@ export default () => {
   // }, [])
 
   const handleChange = (e: any) => {
-    setWord(e.target.value)
+    //setWord(e.target.value)
+    state.setWord(e.target.value)
   }
 
-  const submit = () => {
-    if (word) {
-      navigate(`/search/word/${word}`)
+  const submit = async () => {
+    if (s.word) {
+      state.search()
+      navigate(`/search/word/${s.word}`)
     } else {
       navigate('/')
     }
   }
 
   return (
-    <div className={classes.row}>
+    <div className={classes.row} style={height && width ? { height, width } : {}}>
       <InputBase
         placeholder="Search…"
         classes={{
@@ -104,6 +114,7 @@ export default () => {
         inputProps={{ 'aria-label': 'Search' }}
         onChange={handleChange}
         onKeyDown={onKeyDown}
+        value={s.word}
       />
       <IconButton onClick={submit} className={classes.iconButton} aria-label="Search">
         <SearchIcon />

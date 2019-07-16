@@ -7,6 +7,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button'
 import ListItemText from '@material-ui/core/ListItemText';
+import Search from '@/components/Search'
+import useModel from '@/hooks/useModel'
+import State from '@/models/state'
+import logo from '@/assets/logo.png'
+import { Link } from '@reach/router'
+import TypeIcon from '@/assets/type.png'
+import ThemeIcon from '@/assets/theme.png'
+import ModeIcon from '@/assets/mode.png'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +37,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     text: {
       fontSize: '14px'
+    },
+    row: {
+      display: 'flex',
+      alignItems: 'center'
     }
   })
 )
@@ -70,6 +82,7 @@ const StyledMenuItem = withStyles(theme => ({
 }))(MenuItem);
 
 export default () => {
+  const { needTopSearch } = useModel(State, ['needTopSearch'])
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [type, setType] = React.useState('')
@@ -83,21 +96,26 @@ export default () => {
     setAnchorEl(null);
   }
 
-  const platformOpen = Boolean(anchorEl) && type === 'platform'
   const typeOpen = Boolean(anchorEl) && type === 'type'
   const themeOpen = Boolean(anchorEl) && type === 'theme'
-  const companyOpen = Boolean(anchorEl) && type === 'company'
+  const modeOpen = Boolean(anchorEl) && type === 'mode'
 
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default" className={classes.appBar}>
         <Toolbar>
+          {needTopSearch && <Link to={'/'}><img width="100px" src={logo} /></Link>}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
 
-            <Button className={classes.button} aria-controls="fade-menu-1" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'type')}>
-              类型
+            {needTopSearch && <Search height={35} width={300} />}
+
+            <div className={classes.row}>
+              <Button className={classes.button} aria-controls="fade-menu-1" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'type')}>
+                <img width="20px" style={{ marginRight: '5px' }} src={TypeIcon} />
+                类型
            </Button>
+            </div>
             <StyledMenu
               id="fade-menu-2"
               anchorEl={anchorEl}
@@ -111,9 +129,12 @@ export default () => {
               ))}
             </StyledMenu>
 
-            <Button className={classes.button} aria-controls="fade-menu-3" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'theme')}>
-              题材
+            <div className={classes.row}>
+              <Button className={classes.button} aria-controls="fade-menu-3" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'theme')}>
+                <img width="20px" style={{ marginRight: '5px' }} src={ThemeIcon} />
+                主题
            </Button>
+            </div>
             <StyledMenu
               id="fade-menu-3"
               anchorEl={anchorEl}
@@ -127,13 +148,16 @@ export default () => {
               ))}
             </StyledMenu>
 
-            <Button className={classes.button} aria-controls="fade-menu-4" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'company')}>
-              模式
+            <div className={classes.row}>
+              <Button className={classes.button} aria-controls="fade-menu-4" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'mode')}>
+                <img width="20px" style={{ marginRight: '5px' }} src={ModeIcon} />
+                模式
            </Button>
+            </div>
             <StyledMenu
               id="fade-menu-4"
               anchorEl={anchorEl}
-              open={companyOpen}
+              open={modeOpen}
               onClose={handleClose}
             >
               {['大型多人在线', '多人', '分屏', '网页游戏', '单人', '合作'].map(item => (

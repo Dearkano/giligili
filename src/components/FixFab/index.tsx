@@ -4,7 +4,7 @@ import muiStyled from '@/muiStyled'
 import { Fab } from '@material-ui/core'
 
 const FabS = muiStyled(Fab).attrs({
-  size: 'small',
+  size: 'large',
   color: 'primary',
 })({
   position: 'fixed',
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const FixFab: React.FC<Props> = ({ onClick, order = 1, children }) => (
-  <FabS onClick={onClick} style={{ bottom: (order - 1) * 50 + 15 }}>
+  <FabS onClick={onClick} style={{ bottom: (order - 1) * 60 + 15 }}>
     {children}
   </FabS>
 )

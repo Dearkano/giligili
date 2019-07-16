@@ -1,23 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import List from './list'
 import Search from '@/components/Search'
 import Pagination from "material-ui-flat-pagination";
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
+import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
-import img1 from '@/assets/1.jpg'
-import img2 from '@/assets/2.jpg'
-import img3 from '@/assets/3.jpg'
-import logo from '@/assets/logo.png'
+import logo from '@/assets/search_logo.png'
 import { navigate } from '@/utils/history';
+import DoneIcon from '@material-ui/icons/Done';
 import { Typography, Divider } from '@material-ui/core';
-
+import Chip from '@material-ui/core/Chip';
+import State from '@/models/state'
+import useModel from '@/hooks/useModel'
+import FixFab from '@/components/FixFab'
+import { searchByWord } from '@/services/search'
+import Icon1 from '@/assets/sort.png'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     row: {
       display: 'flex',
       alignItems: 'center',
+      width: '100%'
     },
     column: {
       display: 'flex',
@@ -30,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
     select: {
       display: 'flex',
       width: '100%',
-      marginTop: '10px',
+      height: '100%',
       wordBreak: 'keep-all',
       flexWrap: 'wrap'
     },
@@ -39,9 +45,66 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.primary.main,
         color: '#fff'
       },
+    },
+    heading: {
+      fontSize: theme.typography.pxToRem(15),
+      wordBreak: 'keep-all',
+      marginRight: '50px'
+    },
+    secondaryHeading: {
+      fontSize: theme.typography.pxToRem(15),
+      color: theme.palette.text.secondary,
+    },
+    panel: {
+      boxShadow: 'none',
+      width: '100%'
     }
   })
 )
+const ExpansionPanel = withStyles({
+  root: {
+    boxShadow: 'none',
+    '&:not(:last-child)': {
+      borderBottom: 0,
+    },
+    '&:before': {
+      display: 'none',
+    },
+    '&$expanded': {
+      margin: 'auto',
+    },
+  },
+  expanded: {},
+})(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+  root: {
+    borderTop: '1px solid rgba(0, 0, 0, .125)',
+    marginBottom: -1,
+    minHeight: 30,
+    '&$expanded': {
+      minHeight: 30,
+    },
+  },
+  content: {
+    '&$expanded': {
+      margin: '12px 0',
+    },
+  },
+  expanded: {},
+})(MuiExpansionPanelSummary);
+
+const ExpansionPanelDetails = withStyles(theme => ({
+  root: {
+    padding: '0px 0px 20px 0px',
+    '&expanded': {
+      padding: '0px 0px 0px 0px'
+    },
+  },
+  expanded: {
+    padding: '0px 0px 0px 0px'
+  }
+}))(MuiExpansionPanelDetails);
 
 const StyledRate = withStyles(theme => ({
   root: {
@@ -50,8 +113,11 @@ const StyledRate = withStyles(theme => ({
       color: '#fff'
     },
     padding: '2px 5px 2px 5px',
-    borderRadius: '5px',
-    cursor: 'pointer'
+    borderRadius: '16px',
+    cursor: 'pointer',
+    width: '140px',
+    textAlign: 'center'
+
   },
 }))(Typography);
 
@@ -60,8 +126,10 @@ const StyledCheckedRate = withStyles(theme => ({
     backgroundColor: theme.palette.primary.main,
     color: '#fff',
     padding: '2px 5px 2px 5px',
-    borderRadius: '5px',
-    cursor: 'pointer'
+    borderRadius: '16px',
+    cursor: 'pointer',
+    width: '140px',
+    textAlign: 'center'
   },
 }))(Typography);
 
@@ -71,33 +139,23 @@ interface Props {
 }
 
 export default ({ word, type }: Props) => {
+  useEffect(() => {
+    if(word){
+      State.setWord(word)
+      State.changeTopSearchState(false)
+      State.search()
+    }
+  }, [])
+
   const [page, setPage] = useState(1)
   const [value, setValue] = useState(0)
-  const [checked, setChecked] = useState('')
+  const [typeChecked, setTypeChecked] = useState('')
+  const [themeChecked, setThemeChecked] = useState('')
+  const [rateChecked, setRateChecked] = useState('')
+  const [timeChecked, setTimeChecked] = useState('')
+  const [modeChecked, setModeChecked] = useState('')
   const classes = useStyles()
-  const [list, setList] = useState([
-    {
-      name: '英雄联盟',
-      subname: 'League of Legends',
-      abstract: 'Microsoft Windows, Mac / 2009-10-27 / 即时战略游戏, 战略游戏, 俯瞰 / 《英雄联盟》(简称LOL)是由美国拳头游戏(Riot Games)开发、中国大陆地区腾讯游戏代理运营的英雄对战MOBA竞技网游。游戏里拥有数百个个性英雄，并拥有排位系统、符文系统等特色养成系统。',
-      cover: img1
-    },
-    {
-      name: '怪物猎人：世界',
-      subname: 'Monster Hunter World / モンスターハンター：ワールド',
-      abstract: 'Microsoft Windows, PlayStation 4, Xbox One / 2018-1-26 / 角色扮演游戏, 冒险游戏, 第三人称 / 《怪物猎人 世界》（日语：モンスターハンター：ワールド，英语：Monster Hunter: World，港台译作“魔物猎人 世界”）是一款由卡普空制作并发在PlayStation 4、Xbox One和Windows平台上的动作角色扮演游戏，是系列继2009年发售的《怪物猎人3》之后再次为家用主机平台制作的新作，也是系列首次在Windows上发售本传作品，亦是本传作品首次进行中文化：PlayStation 4版本和Windows上的Steam网络商店版本提供官方繁体中文化，腾讯的Wegame平台将发售Windows版的官方简体中文版本。',
-      cover: img2
-    },
-    {
-      name: '绝地求生大逃杀',
-      subname: "PLAYERUNKNOWN'S BATTLEGROUNDS",
-      abstract: 'Microsoft Windows, Xbox One / 2017-12-12 / 射击游戏, 冒险游戏, 独立游戏, 第一人称, 第三人称 / 绝地求生(PLAYERUNKNOWN’S BATTLEGROUNDS)是战术竞技类型的游戏，每一局游戏将有100名玩家参与，他们将被投放在绝地岛(battlegrounds)的上空，游戏开始跳伞时所有人都一无所有。',
-      cover: img3
-    }
-  ])
-  if (word) {
-
-  }
+  const s = useModel(State)
 
   const handleClick = (offset: number) => {
     setPage(offset / 10 + 1)
@@ -108,64 +166,176 @@ export default ({ word, type }: Props) => {
   }
 
 
-  const handleCheck = (item: string) => {
-    setChecked(item)
+  const handleTypeCheck = (item: string) => {
+    setTypeChecked(item)
   }
+  const handleThemeCheck = (item: string) => {
+    setThemeChecked(item)
+  }
+  const handleModeCheck = (item: string) => {
+    setModeChecked(item)
+  }
+  const handleRateCheck = (item: string) => {
+    setRateChecked(item)
+  }
+  const handleTimeCheck = (item: string) => {
+    setTimeChecked(item)
+  }
+  const [typeExpand, setTypeExpand] = useState(false)
+  const [themeExpand, setThemeExpand] = useState(false)
+  const [timeExpand, setTimeExpand] = useState(false)
+  const [modeExpand, setModeExpand] = useState(false)
+  const [expand, setExpand] = useState(false)
   return (<div className={classes.column}>
 
-    <div className={classes.row}>
-      <img width="100px" style={{ marginRight: '20px' }} src={logo} />
+    <div className={classes.row} style={{ justifyContent: 'center' }}>
+      <img width="200px" style={{ marginRight: '20px', marginTop: '15px' }} src={logo} />
       <Search />
     </div>
 
-    <Tabs value={value} onChange={handleChange}>
-      <Tab label="游戏类型" />
-      <Tab label="游戏主题" />
-      <Tab label="评分" />
-      <Tab label="发行时间" />
-    </Tabs>
+    <div className={classes.row} style={{ marginTop: '20px', marginBottom: '20px', justifyContent: 'center' }}>
+      {typeChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleTypeCheck('')} label={typeChecked} />}
+      {themeChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleThemeCheck('')} label={themeChecked} />}
+      {rateChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleRateCheck('')} label={rateChecked} />}
+      {timeChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleTimeCheck('')} label={timeChecked} />}
+      {modeChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleModeCheck('')} label={modeChecked} />}
+    </div>
 
-    {value === 2 &&
-      <div className={classes.select}>
-        {['全部', '0-1', '2-3', '4-5', '6-7', '>8'].map(item => (
-          <div style={{ display: 'flex' }} onClick={() => handleCheck(item)}>
-            {checked !== item && <StyledRate color="primary">{item}</StyledRate>}
-            {checked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
-            <div style={{ width: '20px' }}></div>
-          </div>
-        ))}
-      </div>}
+    <ExpansionPanel className={classes.panel} expanded={typeExpand}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon onClick={() => setTypeExpand(!typeExpand)} />}
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
+      >
+        <Typography className={classes.heading}>游戏类型</Typography>
+        {!typeExpand && <div className={classes.select}>
+          {['角色扮演游戏', '即时战略游戏', '独立游戏', '冒险游戏', '休闲', '动作游戏', '射击游戏'].map(item => (
+            <div style={{ display: 'flex' }} onClick={() => handleTypeCheck(item)}>
+              {typeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
+              {typeChecked === item && <StyledCheckedRate >{item}</StyledCheckedRate>}
+              <div style={{ width: '20px' }}></div>
+            </div>))}
+        </div>}
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+        <div className={classes.select}>
+          {['生存恐怖', '校园', '角色扮演游戏', '即时战略游戏', '免费游玩', '独立游戏', '战争', '文字冒险游戏', '桌面游戏', '动作冒险游戏', '音乐游戏', '家庭', '卡牌', '钓鱼', '休闲', '第三人称', '体育游戏', '解谜游戏', '模拟游戏', '第一人称', '动作游戏', '虚拟现实', '聚会', '射击游戏', '冒险游戏', '格斗游戏', '弹珠台', '回合制战略游戏', '点击游戏', '日式角色扮演游戏', '动作角色扮演游戏', '养成', '恋爱冒险', '平台游戏', '儿童', '大型多人在线', '文字', '多人', '竞速游戏', '街机', '实用工具', '战略游戏'].map(item => (
+            <div style={{ display: 'flex' }} onClick={() => handleTypeCheck(item)}>
+              {typeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
+              {typeChecked === item && <StyledCheckedRate >{item}</StyledCheckedRate>}
+              <div style={{ width: '20px' }}></div>
+            </div>))}
+        </div>
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
 
-    {value === 0 &&
-      <div className={classes.select}>
-        {['全部', '生存恐怖', '校园', '角色扮演游戏', '即时战略游戏', '免费游玩', '独立游戏', '战争', '文字冒险游戏', '桌面游戏', '动作冒险游戏', '音乐游戏', '家庭', '卡牌', '钓鱼', '休闲', '第三人称','体育游戏', '解谜游戏','模拟游戏', '第一人称', '动作游戏', '虚拟现实', '聚会', '射击游戏', '冒险游戏', '格斗游戏', '弹珠台', '回合制战略游戏', '点击游戏', '日式角色扮演游戏', '动作角色扮演游戏', '养成', '恋爱冒险',  '平台游戏', '儿童', '大型多人在线', '文字', '多人', '竞速游戏', '街机', '实用工具', '战略游戏'].map(item => (
-          <div style={{ display: 'flex' }} onClick={() => handleCheck(item)}>
-            {checked !== item && <StyledRate color="primary">{item}</StyledRate>}
-            {checked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
-            <div style={{ width: '20px' }}></div>
-          </div>
-        ))}
-      </div>}
 
-      {value === 1 &&
-      <div className={classes.select}>
-        {['全部', '潜行', '非虚构', '生存恐怖', '4X', '校园', '美少女', '战争', '喜剧', '教育', '剧情', '科幻', '奇幻', '色情', '卡牌', 'Roguelike', '恋爱', '惊悚', '悬疑', '动作游戏', '聚会', '生存', '恋爱冒险', '开放世界', '儿童', '历史', '类侠盗猎车手', '养成', '沙盒', '节奏', '模拟经营'].map(item => (
-          <div style={{ display: 'flex' }} onClick={() => handleCheck(item)}>
-            {checked !== item && <StyledRate color="primary">{item}</StyledRate>}
-            {checked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
-            <div style={{ width: '20px' }}></div>
-          </div>
-        ))}
-      </div>}
+    <ExpansionPanel className={classes.panel} expanded={themeExpand}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon onClick={() => setThemeExpand(!themeExpand)} />}
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
+      >
+        <Typography className={classes.heading}>游戏主题</Typography>
+        {!themeExpand && <div className={classes.select}>
+          {['开放世界', '生存恐怖', '4X', '剧情', '科幻', '奇幻', '模拟经营'].map(item => (
+            <div style={{ display: 'flex' }} onClick={() => handleThemeCheck(item)}>
+              {themeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
+              {themeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
+              <div style={{ width: '20px' }}></div>
+            </div>
+          ))}
+        </div>}
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+        <div className={classes.select}>
+          {['潜行', '非虚构', '生存恐怖', '4X', '校园', '美少女', '战争', '喜剧', '教育', '剧情', '科幻', '奇幻', '色情', '卡牌', 'Roguelike', '恋爱', '惊悚', '悬疑', '动作游戏', '聚会', '生存', '恋爱冒险', '开放世界', '儿童', '历史', '类侠盗猎车手', '养成', '沙盒', '节奏', '模拟经营'].map(item => (
+            <div style={{ display: 'flex' }} onClick={() => handleThemeCheck(item)}>
+              {themeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
+              {themeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
+              <div style={{ width: '20px' }}></div>
+            </div>
+          ))}
+        </div>
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
 
-    <List list={list} />
+    <ExpansionPanel className={classes.panel} expanded={modeExpand}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon onClick={() => { }} />}
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
+      >
+        <Typography className={classes.heading}>游戏模式</Typography>
+        {!modeExpand && <div className={classes.select}>
+          {['大型多人在线', '多人', '分屏', '网页游戏', '单人', '合作'].map(item => (
+            <div style={{ display: 'flex' }} onClick={() => handleModeCheck(item)}>
+              {modeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
+              {modeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
+              <div style={{ width: '20px' }}></div>
+            </div>
+          ))}
+        </div>}
+      </ExpansionPanelSummary>
+    </ExpansionPanel>
+
+
+    <ExpansionPanel className={classes.panel} expanded={timeExpand}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon onClick={() => setTimeExpand(!timeExpand)} />}
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
+      >
+        <Typography className={classes.heading}>发行时间</Typography>
+        {!timeExpand && <div className={classes.select}>
+          {['2019', '2018', '2017', '2016', '2015', '2014', '2013',].map(item => (
+            <div style={{ display: 'flex' }} onClick={() => handleTimeCheck(item)}>
+              {timeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
+              {timeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
+              <div style={{ width: '20px' }}></div>
+            </div>
+          ))}
+        </div>}
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+        <div className={classes.select}>
+          {['2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009年以前'].map(item => (
+            <div style={{ display: 'flex' }} onClick={() => handleTimeCheck(item)}>
+              {timeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
+              {timeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
+              <div style={{ width: '20px' }}></div>
+            </div>
+          ))}
+        </div>
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
+    <List list={s.content} />
 
     <Pagination
+      style={{ marginTop: '20px' }}
+      size="large"
       limit={10}
       offset={(page - 1) * 10}
       total={100}
       onClick={(e, offset) => handleClick(offset)}
     />
+
+    {expand && (
+      <>
+        <FixFab order={4}>
+          综合
+  </FixFab>
+        <FixFab order={3}>
+          评分↑
+  </FixFab>
+        <FixFab order={2}>
+          评分↓
+  </FixFab>
+      </>
+    )}
+    <FixFab onClick={() => setExpand(!expand)}>
+      <img width="40px" src={Icon1} />
+    </FixFab>
 
   </div>)
 }
