@@ -28,7 +28,7 @@ function randomNum(minNum: number, maxNum: number) {
 const useStyles = makeStyles(
   createStyles({
     card: {
-      width: 1000,
+      width: '100%',
       marginTop: 30,
       boxShadow: 'none'
     },

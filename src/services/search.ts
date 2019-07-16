@@ -6,14 +6,21 @@ interface Params {
   time?: string
   mode?: string
   word: string
+  order: number | null
+  page: number | null
 }
 export async function searchByWord(params: Params) {
-  const { type, theme, time, mode, word } = params
-  let query = `search/s?key=${word}`
+  const { type, theme, time, mode, word, order, page } = params
+  let query = ''
+  if(word) query = `search/s?key=${word}`
+  else query =  `search/games?`
+
   if (type) query += `&type=${type}`
   if (theme) query += `&theme=${theme}`
   if (time) query += `&time=${time}`
   if (mode) query += `&mode=${mode}`
+  if (order) query += `&isOrdered=${order}`
+  if (page) query += `&page=${page}`
   return await GET(query)
 }
 

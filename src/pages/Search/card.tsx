@@ -7,6 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import { IMiniData } from '@giligili'
+import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,6 +45,9 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 38,
       width: 38,
     },
+    row: {
+      display: 'flex'
+    }
   }),
 );
 
@@ -56,7 +60,7 @@ export default function MediaControlCard({ item }: Props) {
   const theme: any = useTheme();
 
   return (
-    <Link style={{textDecoration: 'none', marginTop: '45px', width: '100%'}} to={`/game/${item._id}`}>
+    <Link style={{ textDecoration: 'none', marginTop: '45px', width: '100%' }} to={`/game/${item._id}`}>
       <Card className={classes.card}>
         <CardActionArea style={{ display: 'flex' }}>
           <CardMedia
@@ -65,9 +69,15 @@ export default function MediaControlCard({ item }: Props) {
           />
           <div className={classes.details}>
             <CardContent className={classes.content}>
-              <Typography component="h5" variant="h5">
-                {item.name}
-              </Typography>
+              <div className={classes.row}>
+                <Typography component="h5" variant="h5">
+                  {item.name}
+                </Typography>
+
+                {item.theme.length !== 0 && <Chip style={{marginLeft: '10px'}} color="primary" label={item.theme[0]} />}
+                {item.type.length !== 0 && <Chip style={{marginLeft: '10px'}} color="primary" label={item.type[0]} />}
+                {item.view.length !== 0 && <Chip style={{marginLeft: '10px'}} color="primary" label={item.view[0]} />}
+              </div>
               <Typography variant="subtitle2" color="textSecondary">
                 {item.subname}
               </Typography>

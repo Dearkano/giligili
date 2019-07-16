@@ -17,6 +17,11 @@ import useModel from '@/hooks/useModel'
 import FixFab from '@/components/FixFab'
 import { searchByWord } from '@/services/search'
 import Icon1 from '@/assets/sort.png'
+import Icon2 from '@/assets/default.png'
+import Icon3 from '@/assets/up.png'
+import Icon4 from '@/assets/down.png'
+import BlankImg from '@/assets/blank.png'
+import Loading from '@/components/LoadingCircle'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -136,19 +141,33 @@ const StyledCheckedRate = withStyles(theme => ({
 interface Props {
   word?: string
   type?: string
+  mode?: string
+  theme?: string
 }
 
-export default ({ word, type }: Props) => {
+export default ({ word, type, theme, mode }: Props) => {
   useEffect(() => {
-    if(word){
+    if (word) {
       State.setWord(word)
-      State.changeTopSearchState(false)
-      State.search()
     }
-  }, [])
+    if (type) {
+      console.log(type)
+      setTypeChecked(type)
+      State.setType(type)
+    }
+    if (theme) {
+      setThemeChecked(theme)
+      State.setTheme(theme)
+    }
+    if (mode) {
+      setModeChecked(mode)
+      State.setMode(mode)
+    }
+    State.changeTopSearchState(false)
+    State.search()
+  }, [type, theme, mode])
 
   const [page, setPage] = useState(1)
-  const [value, setValue] = useState(0)
   const [typeChecked, setTypeChecked] = useState('')
   const [themeChecked, setThemeChecked] = useState('')
   const [rateChecked, setRateChecked] = useState('')
@@ -158,28 +177,39 @@ export default ({ word, type }: Props) => {
   const s = useModel(State)
 
   const handleClick = (offset: number) => {
+    State.setPage(offset / 10 + 1)
     setPage(offset / 10 + 1)
-  }
-
-  const handleChange = (e: any, val: number) => {
-    setValue(val)
+    State.search()
   }
 
 
   const handleTypeCheck = (item: string) => {
+    State.setType(item)
     setTypeChecked(item)
+    State.search()
   }
   const handleThemeCheck = (item: string) => {
+    State.setTheme(item)
     setThemeChecked(item)
+    State.search()
   }
   const handleModeCheck = (item: string) => {
+    State.setMode(item)
     setModeChecked(item)
+    State.search()
   }
   const handleRateCheck = (item: string) => {
+    let num = 0
+    if (item === '降序') num = 1
+    if (item === '升序') num = -1
+    State.setOrder(num)
     setRateChecked(item)
+    State.search()
   }
   const handleTimeCheck = (item: string) => {
+    State.setTheme(item)
     setTimeChecked(item)
+    State.search()
   }
   const [typeExpand, setTypeExpand] = useState(false)
   const [themeExpand, setThemeExpand] = useState(false)
@@ -209,7 +239,7 @@ export default ({ word, type }: Props) => {
       >
         <Typography className={classes.heading}>游戏类型</Typography>
         {!typeExpand && <div className={classes.select}>
-          {['角色扮演游戏', '即时战略游戏', '独立游戏', '冒险游戏', '休闲', '动作游戏', '射击游戏'].map(item => (
+          {['角色扮演游戏', '即时战略游戏', '独立游戏', '冒险游戏', '休闲'].map(item => (
             <div style={{ display: 'flex' }} onClick={() => handleTypeCheck(item)}>
               {typeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {typeChecked === item && <StyledCheckedRate >{item}</StyledCheckedRate>}
@@ -238,7 +268,7 @@ export default ({ word, type }: Props) => {
       >
         <Typography className={classes.heading}>游戏主题</Typography>
         {!themeExpand && <div className={classes.select}>
-          {['开放世界', '生存恐怖', '4X', '剧情', '科幻', '奇幻', '模拟经营'].map(item => (
+          {['开放世界', '生存恐怖', '4X', '剧情', '科幻'].map(item => (
             <div style={{ display: 'flex' }} onClick={() => handleThemeCheck(item)}>
               {themeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {themeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
@@ -262,11 +292,22 @@ export default ({ word, type }: Props) => {
 
     <ExpansionPanel className={classes.panel} expanded={modeExpand}>
       <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon onClick={() => { }} />}
+        expandIcon={<ExpandMoreIcon onClick={() => setModeExpand(!modeExpand)} />}
         aria-controls="panel1bh-content"
         id="panel1bh-header"
       >
         <Typography className={classes.heading}>游戏模式</Typography>
+        {!modeExpand && <div className={classes.select}>
+          {['大型多人在线', '多人', '分屏', '网页游戏', '单人'].map(item => (
+            <div style={{ display: 'flex' }} onClick={() => handleModeCheck(item)}>
+              {modeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
+              {modeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
+              <div style={{ width: '20px' }}></div>
+            </div>
+          ))}
+        </div>}
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
         {!modeExpand && <div className={classes.select}>
           {['大型多人在线', '多人', '分屏', '网页游戏', '单人', '合作'].map(item => (
             <div style={{ display: 'flex' }} onClick={() => handleModeCheck(item)}>
@@ -276,7 +317,7 @@ export default ({ word, type }: Props) => {
             </div>
           ))}
         </div>}
-      </ExpansionPanelSummary>
+      </ExpansionPanelDetails>
     </ExpansionPanel>
 
 
@@ -288,7 +329,7 @@ export default ({ word, type }: Props) => {
       >
         <Typography className={classes.heading}>发行时间</Typography>
         {!timeExpand && <div className={classes.select}>
-          {['2019', '2018', '2017', '2016', '2015', '2014', '2013',].map(item => (
+          {['2019', '2018', '2017', '2016', '2015'].map(item => (
             <div style={{ display: 'flex' }} onClick={() => handleTimeCheck(item)}>
               {timeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {timeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
@@ -309,32 +350,35 @@ export default ({ word, type }: Props) => {
         </div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
-    <List list={s.content} />
+
+    {!s.loading && s.content.length !== 0 && <List list={s.content} />}
+    {!s.loading && s.content.length === 0 && <img width="400px" style={{ marginTop: '100px' }} src={BlankImg} />}
+    {s.loading && <Loading />}
 
     <Pagination
       style={{ marginTop: '20px' }}
       size="large"
       limit={10}
       offset={(page - 1) * 10}
-      total={100}
+      total={s.totalElements}
       onClick={(e, offset) => handleClick(offset)}
     />
 
     {expand && (
       <>
-        <FixFab order={4}>
-          综合
-  </FixFab>
-        <FixFab order={3}>
-          评分↑
-  </FixFab>
-        <FixFab order={2}>
-          评分↓
-  </FixFab>
+        <FixFab order={4} onClick={() => handleRateCheck('默认')}>
+          <img width="40px" style={{ paddingTop: '5px' }} src={Icon2} />
+        </FixFab>
+        <FixFab order={3} onClick={() => handleRateCheck('升序')}>
+          <img width="40px" style={{ paddingTop: '5px' }} src={Icon3} />
+        </FixFab>
+        <FixFab order={2} onClick={() => handleRateCheck('降序')}>
+          <img width="40px" style={{ paddingTop: '5px' }} src={Icon4} />
+        </FixFab>
       </>
     )}
     <FixFab onClick={() => setExpand(!expand)}>
-      <img width="40px" src={Icon1} />
+      <img width="40px" style={{ paddingTop: '5px' }} src={Icon1} />
     </FixFab>
 
   </div>)

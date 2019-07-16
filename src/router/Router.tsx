@@ -27,6 +27,8 @@ const MyRouter: React.FC<ILocation> = ({ location }) => (
     <Route path="/" component={Home} />
     <Route path="/search/word/:word" component={Search} />
     <Route path="/search/type/:type" component={Search} />
+    <Route path="/search/theme/:theme" component={Search} />
+    <Route path="/search/mode/:mode" component={Search} />
     <Route path="/game/:id" component={Game} />
   </Router>
 )

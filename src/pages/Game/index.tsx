@@ -14,6 +14,8 @@ import Icon2 from '@/assets/news.png'
 import Icon3 from '@/assets/chart.png'
 import News from './News'
 import { searchGameById } from '@/services/search'
+import Data from './Data'
+import Paper from '@material-ui/core/Paper'
 
 interface Props {
   id: string
@@ -44,7 +46,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      width: '1000px'
+      width: '1000px',
+      paddingLeft: '30px',
+      paddingRight: '30px',
+      paddingBottom: '30px',
+      marginTop: '30px',
+      boxShadow: '0px 4px 20px 0px rgba(0,0,0,0.2), 0px 8px 8px 0px rgba(0,0,0,0.14), 0px 12px 4px -8px rgba(0,0,0,0.12)'
     }
   })
 )
@@ -69,7 +76,7 @@ export default ({ id }: Props) => {
   const { tgbusData } = data
   return (
     <div className={classes.root}>
-      <div className={classes.body}>
+      <Paper className={classes.body}>
         <Header item={data} />
 
         <div className={classes.row}>
@@ -100,10 +107,10 @@ export default ({ id }: Props) => {
         }
         {
           value === 2 && <>
-            <img style={{ marginTop: '50px' }} src={data.wordcloud} />
+            <Data data={data} />
           </>
         }
-      </div>
+      </Paper>
     </div>
   )
 }

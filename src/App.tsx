@@ -10,11 +10,12 @@ import { getTheme } from '@/theme'
 import Router from '@/router'
 import TopBar from '@/components/TopBar'
 import BotImg from '@/assets/bot.png'
+import Paper from '@material-ui/core/Paper'
 const App = () => (
   <>
     <TopBar />
     <Router />
-    <div style={{ display: 'flex', justifyContent: 'center', width: '100%',marginBottom: '30px',marginTop:'50px' }}><img width="400px" src={BotImg} /></div>
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '30px', marginTop: '50px', position: 'absolute' }}><img width="400px" src={BotImg} /></div>
   </>
 )
 

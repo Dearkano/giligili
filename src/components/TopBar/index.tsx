@@ -15,11 +15,13 @@ import { Link } from '@reach/router'
 import TypeIcon from '@/assets/type.png'
 import ThemeIcon from '@/assets/theme.png'
 import ModeIcon from '@/assets/mode.png'
+import { navigate } from '@reach/router'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
+      borderBottom: '#eaeaea solid 1px'
     },
     grow: {
       flexGrow: 1,
@@ -100,6 +102,18 @@ export default () => {
   const themeOpen = Boolean(anchorEl) && type === 'theme'
   const modeOpen = Boolean(anchorEl) && type === 'mode'
 
+  const searchType = (v: string) => {
+    navigate(`/search/type/${v}`)
+    handleClose()
+  }
+  const searchTheme = (v: string) => {
+    navigate(`/search/theme/${v}`)
+    handleClose()
+  }
+  const searchMode = (v: string) => {
+    navigate(`/search/mode/${v}`)
+    handleClose()
+  }
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default" className={classes.appBar}>
@@ -123,7 +137,7 @@ export default () => {
               onClose={handleClose}
             >
               {['生存恐怖', '校园', '角色扮演游戏', '即时战略游戏', '免费游玩', '独立游戏', '战争', '文字冒险游戏', '桌面游戏', '动作冒险游戏', '音乐游戏', '家庭', '卡牌', '钓鱼', '休闲', '第三人称', '体育游戏', '解谜游戏', '模拟游戏', '第一人称', '动作游戏', '虚拟现实', '聚会', '射击游戏', '冒险游戏', '格斗游戏', '弹珠台', '回合制战略游戏', '点击游戏', '日式角色扮演游戏', '动作角色扮演游戏', '养成', '恋爱冒险', '平台游戏', '儿童', '大型多人在线', '文字', '多人', '竞速游戏', '街机', '实用工具', '战略游戏'].map(item => (
-                <StyledMenuItem onClick={handleClose}>
+                <StyledMenuItem onClick={() => searchType(item)}>
                   <ListItemText classes={{ primary: classes.text }} primary={item} />
                 </StyledMenuItem>
               ))}
@@ -142,7 +156,7 @@ export default () => {
               onClose={handleClose}
             >
               {['非虚构', '生存恐怖', '校园', '战争', '喜剧', '教育', '剧情', '科幻', '奇幻', '卡牌', '恋爱', '惊悚', '悬疑', '动作游戏', '生存', '恋爱冒险', '开放世界', '儿童', '历史', '类侠盗猎车手', '养成', '沙盒', '模拟经营'].map(item => (
-                <StyledMenuItem onClick={handleClose}>
+                <StyledMenuItem onClick={() => searchTheme(item)}>
                   <ListItemText classes={{ primary: classes.text }} primary={item} />
                 </StyledMenuItem>
               ))}
@@ -161,7 +175,7 @@ export default () => {
               onClose={handleClose}
             >
               {['大型多人在线', '多人', '分屏', '网页游戏', '单人', '合作'].map(item => (
-                <StyledMenuItem onClick={handleClose}>
+                <StyledMenuItem onClick={() => searchMode(item)}>
                   <ListItemText classes={{ primary: classes.text }} primary={item} />
                 </StyledMenuItem>
               ))}

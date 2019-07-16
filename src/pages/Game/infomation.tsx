@@ -26,37 +26,37 @@ export default ({ data }: Props) => {
     <div style={{ marginLeft: '30px', height: '450px', paddingTop: '30px' }} className={classes.column}>
       <div className={classes.item}>
         <div style={{ width: '100px', fontWeight: 'bolder' }}>首发日期</div>
-        <div>{tgbusData.startDate}</div>
+        <div style={{ width: '100px'}}>{tgbusData.startDate}</div>
       </div>
 
       <div className={classes.item}>
         <div style={{ width: '100px', fontWeight: 'bolder' }}>开发商</div>
-        <div>{tgbusData.issuer}</div>
+        <div style={{ width: '100px' }}>{tgbusData.issuer}</div>
       </div>
 
       <div className={classes.item}>
         <div style={{ width: '100px' , fontWeight: 'bolder'}}>游戏引擎</div>
-        <div>{tgbusData.engine}</div>
+        <div style={{ width: '100px' }}>{tgbusData.engine}</div>
       </div>
 
       <div className={classes.item}>
         <div style={{ width: '100px', fontWeight: 'bolder' }}>类别</div>
-        <div>{tgbusData.type.map(item => <div>{item}</div>)}</div>
+        <div style={{ width: '100px'}}>{tgbusData.type.map(item => <div>{item}</div>)}</div>
       </div>
 
       <div className={classes.item}>
         <div style={{ width: '100px', fontWeight: 'bolder' }}>主题</div>
-        <div>{tgbusData.theme.map(item => <div>{item}</div>)}</div>
+        <div style={{ width: '100px' }}>{tgbusData.theme.map(item => <div>{item}</div>)}</div>
       </div>
 
       <div className={classes.item}>
         <div style={{ width: '100px', fontWeight: 'bolder' }}>游戏模式</div>
-        <div>{tgbusData.mode.map(item => <div>{item}</div>)}</div>
+        <div style={{ width: '100px' }}>{tgbusData.mode.map(item => <div>{item}</div>)}</div>
       </div>
 
       <div className={classes.item}>
         <div style={{ width: '100px', fontWeight: 'bolder' }}>玩家视角</div>
-        <div>{tgbusData.view.map(item => <div>{item}</div>)}</div>
+        <div style={{ width: '100px'}}>{tgbusData.view.map(item => <div>{item}</div>)}</div>
       </div>
     </div>
   )

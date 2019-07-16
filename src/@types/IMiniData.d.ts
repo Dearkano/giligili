@@ -5,5 +5,8 @@ declare module '@giligili'{
     introduction: string
     coverUrl: string
     _id: string
+    theme: string[]
+    type: string[]
+    view: string[]
   }
 }

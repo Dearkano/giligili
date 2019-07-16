@@ -22,24 +22,23 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingBottom: '200px'
+      marginBottom: '-70px',
+      height: document.body.clientHeight-150
     }
   })
 )
 
 export default () => {
   const classes = useStyles();
-  useEffect(()=>{
+  useEffect(() => {
     State.changeTopSearchState(false)
   }, [])
-  return <LayoutCenter>
-    <div className={classes.column}>
+  return (<div className={classes.column}>
 
-      <div>
-        <img width="300px" src={logo} />
-      </div>
-
-      <Search />
+    <div>
+      <img width="300px" src={logo} />
     </div>
-  </LayoutCenter>
+
+    <Search />
+  </div>)
 }

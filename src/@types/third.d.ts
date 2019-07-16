@@ -1,6 +1,8 @@
 declare module '@/assets/logo.png'
 declare module  'react-swipeable-views-utils'
 declare module 'react-swipeable-views'
+declare module  "@antv/data-set"
+declare module 'react-virtualized'
 
 declare module '@/assets/home.png'
 declare module '@/assets/news.png'
@@ -11,3 +13,8 @@ declare module '@/assets/theme.png'
 declare module '@/assets/mode.png'
 declare module '@/assets/search_logo.png'
 declare module '@/assets/bot.png'
+declare module '@/assets/default.png'
+declare module '@/assets/up.png'
+declare module '@/assets/down.png'
+declare module '@/assets/sort.png'
+declare module '@/assets/blank.png'
