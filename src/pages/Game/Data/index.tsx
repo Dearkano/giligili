@@ -21,6 +21,10 @@ import DataSet from "@antv/data-set";
 import { searchGameById } from '@/services/search'
 import { Typography, Paper } from '@material-ui/core';
 import Table from './table'
+import upIcon from '@/assets/upup.png'
+import downIcon from '@/assets/downdown.png'
+import blank from '@/assets/blank2.jpg'
+import Score from './score'
 
 
 interface IChartData {
@@ -155,53 +159,57 @@ export default ({ data }: Props) => {
   const rows: Array<any> = []
   data.trend.map(item => {
     rows.push({
-      name: item.name,
+      name: <Typography variant="body2" style={{ fontWeight: 'bolder' }}>{item.name}</Typography>,
       avg: item.avg,
-      qoq: item.qoq,
-      yoy: item.yoy
+      qoq: <div className={classes.row} style={{ alignItems: 'center', marginLeft: '-12px' }}>
+        <Typography variant="body2" align="right" style={{ width: '2rem' }}>{Math.abs(item.qoq)}%</Typography>
+        <img height="16px" width="10px" src={item.qoq > 0 ? upIcon : downIcon} />
+      </div>,
+      yoy: <div className={classes.row} style={{ alignItems: 'center', marginLeft: '-12px' }}>
+        <Typography variant="body2" align="right" style={{ width: '2rem' }}>{Math.abs(item.yoy)}%</Typography>
+        <img height="16px" width="10px" src={item.yoy > 0 ? upIcon : downIcon} />
+      </div>
     })
   })
 
   return (<div className={classes.column}>
+    <Score data={data} />
+    {(!dv || JSON.stringify(baiduData) === '{}' || !baiduData.all) && <img width="500px" style={{ alignSelf: 'center', marginTop: '30px', marginBottom: '40px' }} src={blank} />}
     {dv && JSON.stringify(baiduData) !== '{}' && <div className={classes.row} style={{ marginTop: '20px' }}>
 
-      <div className={classes.column} style={{ width: '70%', height: '900px' }}>
+      <div className={classes.column} style={{ width: '500px', marginRight: '40px', height: '900px' }}>
 
-        <Paper style={{ height: 300, width: '500px', marginBottom: '20px' }}>
+        <Paper style={{ height: 300, width: '500px', marginBottom: '40px' }}>
           <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
             <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">热度分析</Typography>
           </div>
           <div className={classes.row} style={{ justifyContent: 'center', marginTop: '50px' }}>
-            <div className={classes.column} style={{ width: '120px', marginRight: '20px' }}>
-              <Fab className={classes.fab} color="primary">
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography>总体热度</Typography>
-                  <Typography>{baiduData.all.avg}</Typography>
+            {[{ title: '总体热度', label: 'all' }, { title: '移动端', label: 'wise' }, { title: '电脑端', label: 'pc' }].map(item =>
+              (
+                <div className={classes.column} style={{ width: '120px', marginRight: '20px' }}>
+                  <Fab className={classes.fab} color="primary">
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <Typography variant="body1">{item.title}</Typography>
+                      <Typography style={{ fontWeight: 'bolder' }} variant="h5">{baiduData[item.label].avg}</Typography>
+                    </div>
+                  </Fab>
+                  <div className={classes.row} style={{ justifyContent: 'center' }}>
+                    <Typography variant="body2">同比:</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="body2" align="right" style={{ width: '2rem' }}>{typeof baiduData.all.qoq === 'number' ? `${Math.abs(baiduData[item.label].yoy)}%` : '暂缺'}</Typography>
+                      <img height="16px" width="10px" src={typeof baiduData.all.qoq === 'number' ? baiduData[item.label].yoy > 0 ? upIcon : downIcon : ''} />
+                    </div>
+                  </div>
+                  <div className={classes.row} style={{ justifyContent: 'center' }}>
+                    <Typography variant="body2">环比:</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="body2" align="right" style={{ width: '2rem' }}>{typeof baiduData.all.qoq === 'number' ? `${Math.abs(baiduData[item.label].qoq)}%` : '暂缺'}</Typography>
+                      <img height="16px" width="10px" src={typeof baiduData.all.qoq === 'number' ? baiduData[item.label].qoq > 0 ? upIcon : downIcon : ''} />
+                    </div>
+                  </div>
                 </div>
-              </Fab>
-              <Typography align="center">同比: {baiduData.all.yoy}%</Typography>
-              <Typography align="center">环比: {baiduData.all.qoq}%</Typography>
-            </div>
-            <div className={classes.column} style={{ width: '120px', marginRight: '20px' }}>
-              <Fab className={classes.fab} color="primary">
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography>移动端</Typography>
-                  <Typography>{baiduData.wise.avg}</Typography>
-                </div>
-              </Fab>
-              <Typography align="center">同比: {baiduData.wise.yoy}%</Typography>
-              <Typography align="center">环比: {baiduData.wise.qoq}%</Typography>
-            </div>
-            <div className={classes.column} style={{ width: '120px', marginRight: '20px' }}>
-              <Fab className={classes.fab} color="primary">
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography>电脑端</Typography>
-                  <Typography>{baiduData.pc.avg}</Typography>
-                </div>
-              </Fab>
-              <Typography align="center">同比: {baiduData.pc.yoy}%</Typography>
-              <Typography align="center">环比: {baiduData.pc.qoq}%</Typography>
-            </div>
+              ))
+            }
           </div>
         </Paper>
         <Paper style={{ height: 400, width: '500px' }}>
@@ -229,7 +237,7 @@ export default ({ data }: Props) => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', height: '900px' }}>
-        <Paper style={{ height: 300, width: '100%', marginBottom: '20px' }}>
+        <Paper style={{ height: 300, width: '100%', marginBottom: '40px' }}>
           <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
             <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">类型分析</Typography>
           </div>
@@ -264,7 +272,7 @@ export default ({ data }: Props) => {
           </Paper>
         </Paper>
         <Paper style={{ height: 400, width: '400px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%',justifyContent:'center' }}>
             <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
               <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">性别比例</Typography>
             </div>
@@ -280,11 +288,7 @@ export default ({ data }: Props) => {
               >
                 <Coord type="theta" radius={0.75} />
                 <Axis name="percent" />
-                <Legend
-                  position="right"
-                  offsetY={-window.innerHeight / 2 + 120}
-                  offsetX={-100}
-                />
+
                 <Tooltip
                   showTitle={false}
                   itemTpl="<li><span style=&quot;background-color:{color};&quot; class=&quot;g2-tooltip-marker&quot;></span>{name}: {value}</li>"
@@ -293,7 +297,7 @@ export default ({ data }: Props) => {
                   type="intervalStack"
                   position="percent"
                   color={['item', item => {
-                    return item === '男' ? '#ff81a7' : '#47bafd'
+                    return item === '女' ? '#ff81a7' : '#47bafd'
                   }]}
                   tooltip={[
                     "item*percent",
@@ -318,6 +322,6 @@ export default ({ data }: Props) => {
       </div>
 
     </div>}
-    <img height="500px" src={data.wordcloud} />
+    {data.wordcloud && <img height="400px" width="800px" src={data.wordcloud} style={{ alignSelf: 'center' }} />}
   </div>)
 }

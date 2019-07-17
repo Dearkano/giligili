@@ -15,7 +15,7 @@ const App = () => (
   <>
     <TopBar />
     <Router />
-    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '30px', marginTop: '50px', position: 'absolute' }}><img width="400px" src={BotImg} /></div>
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '30px', marginTop: '50px', position: 'absolute' }}><img width="400px" height="65px" src={BotImg} /></div>
   </>
 )
 

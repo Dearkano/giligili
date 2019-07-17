@@ -57,6 +57,20 @@ class GlobalModel extends Model<State> {
     })
   }
 
+  clear = () => {
+    this.setState({
+      word: '',
+      content: [],
+      type: '',
+      mode: '',
+      theme: '',
+      order: null,
+      time: '',
+      page: null,
+      totalElements: 0,
+    })
+  }
+
 
 }
 

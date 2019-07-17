@@ -20,6 +20,7 @@ declare module '@giligili'{
       yoy:number
       qoq:number
     },
-    _id: string
+    _id: string,
+    [key: string]:any
   }
 }

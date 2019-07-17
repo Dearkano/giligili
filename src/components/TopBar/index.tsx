@@ -118,7 +118,11 @@ export default () => {
     <div className={classes.root}>
       <AppBar position="static" color="default" className={classes.appBar}>
         <Toolbar>
-          {needTopSearch && <Link to={'/'}><img width="100px" src={logo} /></Link>}
+          {needTopSearch && <img width="100px" style={{ cursor: 'pointer' }} src={logo} onClick={() => {
+            State.clear()
+            navigate('/'
+            )
+          }} />}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
 

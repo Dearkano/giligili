@@ -63,7 +63,7 @@ export default function MediaControlCard({ item }: Props) {
         />
         <div className={classes.details}>
           <CardContent className={classes.content}>
-            <Typography component="h4" variant="h4" color="primary">
+            <Typography style={{fontWeight: 'bolder'}} component="h4" variant="h4" color="primary">
               {tgbusData.name}
             </Typography>
             <Typography variant="h6" color="primary">

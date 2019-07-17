@@ -8,20 +8,21 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import { IMiniData } from '@giligili'
 import Chip from '@material-ui/core/Chip';
+import State from '@/models/state'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
       display: 'flex',
       height: '150px',
-      width: '100%'
+      width: '100%',
     },
     details: {
       display: 'flex',
       flexDirection: 'column',
       height: '150px',
       overflow: 'hidden',
-      paddingTop: '2px',
+      paddingTop: '10px',
       flexGrow: 1
     },
     content: {
@@ -60,7 +61,7 @@ export default function MediaControlCard({ item }: Props) {
   const theme: any = useTheme();
 
   return (
-    <Link style={{ textDecoration: 'none', marginTop: '45px', width: '100%' }} to={`/game/${item._id}`}>
+    <Link style={{ textDecoration: 'none', marginTop: '45px', width: '100%' }} onClick={() => State.clear()} to={`/game/${item._id}`}>
       <Card className={classes.card}>
         <CardActionArea style={{ display: 'flex' }}>
           <CardMedia
@@ -74,14 +75,14 @@ export default function MediaControlCard({ item }: Props) {
                   {item.name}
                 </Typography>
 
-                {item.theme.length !== 0 && <Chip style={{marginLeft: '10px'}} color="primary" label={item.theme[0]} />}
-                {item.type.length !== 0 && <Chip style={{marginLeft: '10px'}} color="primary" label={item.type[0]} />}
-                {item.view.length !== 0 && <Chip style={{marginLeft: '10px'}} color="primary" label={item.view[0]} />}
+                {item.theme.length !== 0 && <Chip style={{ marginLeft: '10px' }} color="primary" label={item.theme[0]} />}
+                {item.type.length !== 0 && <Chip style={{ marginLeft: '10px' }} color="primary" label={item.type[0]} />}
+                {item.view.length !== 0 && <Chip style={{ marginLeft: '10px' }} color="primary" label={item.view[0]} />}
               </div>
               <Typography variant="subtitle2" color="textSecondary">
                 {item.subname}
               </Typography>
-              <Typography style={{ marginTop: '15px' }} variant="body2" color="textSecondary" component="p">
+              <Typography style={{ marginTop: '15px', maxHeight: '60px', overflow: 'hidden' }} variant="body2" color="textSecondary" component="p">
                 {item.introduction}
               </Typography>
             </CardContent>

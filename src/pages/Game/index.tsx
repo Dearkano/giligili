@@ -96,7 +96,7 @@ export default ({ id }: Props) => {
             <Typography variant="h5" color="primary">游戏简介</Typography>
           </div>
           <div style={{ paddingLeft: '30px', paddingTop: '20px' }}>
-            <Typography variant="body2" style={{ lineHeight: '25px', textIndent: '28px' }}>
+            <Typography variant="body2" style={{ lineHeight: '25px', textIndent: '28px', opacity: 0.8 }}>
               {tgbusData.description}
             </Typography>
           </div>

@@ -106,7 +106,7 @@ export default ({ height, width }: Props) => {
   return (
     <div className={classes.row} style={height && width ? { height, width } : {}}>
       <InputBase
-        placeholder="Search…"
+        placeholder="探寻游戏之美…"
         classes={{
           root: classes.inputRoot,
           input: classes.inputInput,

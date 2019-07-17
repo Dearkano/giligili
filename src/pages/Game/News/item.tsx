@@ -77,7 +77,7 @@ export default ({ item }: Props) => {
 
 
             <CardActions style={{ display: 'flex', alignItems: 'center' }}>
-              <Chip className={classes.chip} label={sources[randomNum(0, 4)]} color="primary" />
+              <Chip className={classes.chip} label={sources[item.title.length % 4]} color="primary" />
               <img src={TimeIcon} width="14px" />
               <Typography variant="body2" color="primary">
                 {item.time}

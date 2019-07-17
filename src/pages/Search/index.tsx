@@ -52,9 +52,10 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     heading: {
-      fontSize: theme.typography.pxToRem(15),
+      fontSize: theme.typography.pxToRem(14),
       wordBreak: 'keep-all',
-      marginRight: '50px'
+      marginRight: '50px',
+      fontWeight: 'bolder'
     },
     secondaryHeading: {
       fontSize: theme.typography.pxToRem(15),
@@ -121,7 +122,8 @@ const StyledRate = withStyles(theme => ({
     borderRadius: '16px',
     cursor: 'pointer',
     width: '140px',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: '14px'
 
   },
 }))(Typography);
@@ -134,7 +136,8 @@ const StyledCheckedRate = withStyles(theme => ({
     borderRadius: '16px',
     cursor: 'pointer',
     width: '140px',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: '14px'
   },
 }))(Typography);
 
@@ -207,8 +210,12 @@ export default ({ word, type, theme, mode }: Props) => {
     State.search()
   }
   const handleTimeCheck = (item: string) => {
-    State.setTheme(item)
-    setTimeChecked(item)
+    let i = item
+    if (item === '2009年以前') {
+      i = '2009'
+    }
+    State.setTime(i)
+    setTimeChecked(i)
     State.search()
   }
   const [typeExpand, setTypeExpand] = useState(false)
@@ -219,16 +226,20 @@ export default ({ word, type, theme, mode }: Props) => {
   return (<div className={classes.column}>
 
     <div className={classes.row} style={{ justifyContent: 'center' }}>
-      <img width="200px" style={{ marginRight: '20px', marginTop: '15px' }} src={logo} />
+      <img onClick={() => {
+        State.clear()
+        navigate('/'
+        )
+      }} width="200px" style={{ marginRight: '20px', marginTop: '15px', cursor: 'pointer' }} src={logo} />
       <Search />
     </div>
 
     <div className={classes.row} style={{ marginTop: '20px', marginBottom: '20px', justifyContent: 'center' }}>
-      {typeChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleTypeCheck('')} label={typeChecked} />}
-      {themeChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleThemeCheck('')} label={themeChecked} />}
-      {rateChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleRateCheck('')} label={rateChecked} />}
-      {timeChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleTimeCheck('')} label={timeChecked} />}
-      {modeChecked && <Chip color="primary" style={{ marginRight: '20px' }} onDelete={() => handleModeCheck('')} label={modeChecked} />}
+      {typeChecked && <Chip color="primary" style={{ marginRight: '20px', fontSize: '14px' }} onDelete={() => handleTypeCheck('')} label={typeChecked} />}
+      {themeChecked && <Chip color="primary" style={{ marginRight: '20px', fontSize: '14px' }} onDelete={() => handleThemeCheck('')} label={themeChecked} />}
+      {rateChecked && <Chip color="primary" style={{ marginRight: '20px', fontSize: '14px' }} onDelete={() => handleRateCheck('')} label={rateChecked} />}
+      {timeChecked && <Chip color="primary" style={{ marginRight: '20px', fontSize: '14px' }} onDelete={() => handleTimeCheck('')} label={timeChecked} />}
+      {modeChecked && <Chip color="primary" style={{ marginRight: '20px', fontSize: '14px' }} onDelete={() => handleModeCheck('')} label={modeChecked} />}
     </div>
 
     <ExpansionPanel className={classes.panel} expanded={typeExpand}>
@@ -240,7 +251,7 @@ export default ({ word, type, theme, mode }: Props) => {
         <Typography className={classes.heading}>游戏类型</Typography>
         {!typeExpand && <div className={classes.select}>
           {['角色扮演游戏', '即时战略游戏', '独立游戏', '冒险游戏', '休闲'].map(item => (
-            <div style={{ display: 'flex' }} onClick={() => handleTypeCheck(item)}>
+            <div style={{ display: 'flex' }} onClick={() => handleTypeCheck(typeChecked === item ? '' : item)}>
               {typeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {typeChecked === item && <StyledCheckedRate >{item}</StyledCheckedRate>}
               <div style={{ width: '20px' }}></div>
@@ -250,7 +261,7 @@ export default ({ word, type, theme, mode }: Props) => {
       <ExpansionPanelDetails>
         <div className={classes.select}>
           {['生存恐怖', '校园', '角色扮演游戏', '即时战略游戏', '免费游玩', '独立游戏', '战争', '文字冒险游戏', '桌面游戏', '动作冒险游戏', '音乐游戏', '家庭', '卡牌', '钓鱼', '休闲', '第三人称', '体育游戏', '解谜游戏', '模拟游戏', '第一人称', '动作游戏', '虚拟现实', '聚会', '射击游戏', '冒险游戏', '格斗游戏', '弹珠台', '回合制战略游戏', '点击游戏', '日式角色扮演游戏', '动作角色扮演游戏', '养成', '恋爱冒险', '平台游戏', '儿童', '大型多人在线', '文字', '多人', '竞速游戏', '街机', '实用工具', '战略游戏'].map(item => (
-            <div style={{ display: 'flex' }} onClick={() => handleTypeCheck(item)}>
+            <div style={{ display: 'flex' }} onClick={() => handleTypeCheck(typeChecked === item ? '' : item)}>
               {typeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {typeChecked === item && <StyledCheckedRate >{item}</StyledCheckedRate>}
               <div style={{ width: '20px' }}></div>
@@ -269,7 +280,7 @@ export default ({ word, type, theme, mode }: Props) => {
         <Typography className={classes.heading}>游戏主题</Typography>
         {!themeExpand && <div className={classes.select}>
           {['开放世界', '生存恐怖', '4X', '剧情', '科幻'].map(item => (
-            <div style={{ display: 'flex' }} onClick={() => handleThemeCheck(item)}>
+            <div style={{ display: 'flex' }} onClick={() => handleThemeCheck(themeChecked === item ? '' : item)}>
               {themeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {themeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
               <div style={{ width: '20px' }}></div>
@@ -280,7 +291,7 @@ export default ({ word, type, theme, mode }: Props) => {
       <ExpansionPanelDetails>
         <div className={classes.select}>
           {['潜行', '非虚构', '生存恐怖', '4X', '校园', '美少女', '战争', '喜剧', '教育', '剧情', '科幻', '奇幻', '色情', '卡牌', 'Roguelike', '恋爱', '惊悚', '悬疑', '动作游戏', '聚会', '生存', '恋爱冒险', '开放世界', '儿童', '历史', '类侠盗猎车手', '养成', '沙盒', '节奏', '模拟经营'].map(item => (
-            <div style={{ display: 'flex' }} onClick={() => handleThemeCheck(item)}>
+            <div style={{ display: 'flex' }} onClick={() => handleThemeCheck(themeChecked === item ? '' : item)}>
               {themeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {themeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
               <div style={{ width: '20px' }}></div>
@@ -299,7 +310,7 @@ export default ({ word, type, theme, mode }: Props) => {
         <Typography className={classes.heading}>游戏模式</Typography>
         {!modeExpand && <div className={classes.select}>
           {['大型多人在线', '多人', '分屏', '网页游戏', '单人'].map(item => (
-            <div style={{ display: 'flex' }} onClick={() => handleModeCheck(item)}>
+            <div style={{ display: 'flex' }} onClick={() => handleModeCheck(modeChecked === item ? '' : item)}>
               {modeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {modeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
               <div style={{ width: '20px' }}></div>
@@ -310,7 +321,7 @@ export default ({ word, type, theme, mode }: Props) => {
       <ExpansionPanelDetails>
         {!modeExpand && <div className={classes.select}>
           {['大型多人在线', '多人', '分屏', '网页游戏', '单人', '合作'].map(item => (
-            <div style={{ display: 'flex' }} onClick={() => handleModeCheck(item)}>
+            <div style={{ display: 'flex' }} onClick={() => handleModeCheck(modeChecked === item ? '' : item)}>
               {modeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {modeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
               <div style={{ width: '20px' }}></div>
@@ -330,7 +341,7 @@ export default ({ word, type, theme, mode }: Props) => {
         <Typography className={classes.heading}>发行时间</Typography>
         {!timeExpand && <div className={classes.select}>
           {['2019', '2018', '2017', '2016', '2015'].map(item => (
-            <div style={{ display: 'flex' }} onClick={() => handleTimeCheck(item)}>
+            <div style={{ display: 'flex' }} onClick={() => handleTimeCheck(timeChecked === item ? '' : item)}>
               {timeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {timeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
               <div style={{ width: '20px' }}></div>
@@ -341,7 +352,7 @@ export default ({ word, type, theme, mode }: Props) => {
       <ExpansionPanelDetails>
         <div className={classes.select}>
           {['2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009年以前'].map(item => (
-            <div style={{ display: 'flex' }} onClick={() => handleTimeCheck(item)}>
+            <div style={{ display: 'flex' }} onClick={() => handleTimeCheck(timeChecked === item ? '' : item)}>
               {timeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
               {timeChecked === item && <StyledCheckedRate>{item}</StyledCheckedRate>}
               <div style={{ width: '20px' }}></div>

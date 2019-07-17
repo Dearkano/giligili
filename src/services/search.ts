@@ -17,7 +17,7 @@ export async function searchByWord(params: Params) {
 
   if (type) query += `&type=${type}`
   if (theme) query += `&theme=${theme}`
-  if (time) query += `&time=${time}`
+  if (time) query += `&year=${time}`
   if (mode) query += `&mode=${mode}`
   if (order) query += `&isOrdered=${order}`
   if (page) query += `&page=${page}`
