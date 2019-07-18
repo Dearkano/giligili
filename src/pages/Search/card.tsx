@@ -16,6 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       height: '150px',
       width: '100%',
+      boxShadow: 'none',
+      border: 'rgba(0,0,0,0.125) solid 1px'
     },
     details: {
       display: 'flex',

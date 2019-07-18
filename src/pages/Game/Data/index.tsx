@@ -25,6 +25,12 @@ import upIcon from '@/assets/upup.png'
 import downIcon from '@/assets/downdown.png'
 import blank from '@/assets/blank2.jpg'
 import Score from './score'
+import GenderIcon from '@/assets/性别比例.png'
+import CompetitionIcon from '@/assets/竞品分析.png'
+import IndexIcon from '@/assets/热度分析.png'
+import TypeIcon from '@/assets/类型分析.png'
+import TipIcon from '@/assets/关键词分析.png'
+
 
 
 interface IChartData {
@@ -66,7 +72,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '120px',
       height: '120px',
       fontSize: '20px',
-      marginBottom: '10px'
+      marginBottom: '10px',
+      boxShadow: 'none'
     },
     table: {
       maxHeight: '300px'
@@ -173,155 +180,170 @@ export default ({ data }: Props) => {
   })
 
   return (<div className={classes.column}>
-    <Score data={data} />
-    {(!dv || JSON.stringify(baiduData) === '{}' || !baiduData.all) && <img width="500px" style={{ alignSelf: 'center', marginTop: '30px', marginBottom: '40px' }} src={blank} />}
-    {dv && JSON.stringify(baiduData) !== '{}' && <div className={classes.row} style={{ marginTop: '20px' }}>
+    {data.score.length !== 0 && <Score data={data} />}
+    {(!dv || (JSON.stringify(baiduData) === '{}' && data.score.length === 0)) && <img width="500px" style={{ alignSelf: 'center', marginTop: '30px', marginBottom: '40px' }} src={blank} />}
+    {dv && JSON.stringify(baiduData) !== '{}' && <>
+      <div className={classes.row} style={{ marginTop: '20px' }}>
 
-      <div className={classes.column} style={{ width: '500px', marginRight: '40px', height: '900px' }}>
+        <div className={classes.column} style={{ width: '500px', marginRight: '40px', height: '800px' }}>
 
-        <Paper style={{ height: 300, width: '500px', marginBottom: '40px' }}>
-          <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
-            <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">热度分析</Typography>
-          </div>
-          <div className={classes.row} style={{ justifyContent: 'center', marginTop: '50px' }}>
-            {[{ title: '总体热度', label: 'all' }, { title: '移动端', label: 'wise' }, { title: '电脑端', label: 'pc' }].map(item =>
-              (
-                <div className={classes.column} style={{ width: '120px', marginRight: '20px' }}>
-                  <Fab className={classes.fab} color="primary">
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <Typography variant="body1">{item.title}</Typography>
-                      <Typography style={{ fontWeight: 'bolder' }} variant="h5">{baiduData[item.label].avg}</Typography>
-                    </div>
-                  </Fab>
-                  <div className={classes.row} style={{ justifyContent: 'center' }}>
-                    <Typography variant="body2">同比:</Typography>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography variant="body2" align="right" style={{ width: '2rem' }}>{typeof baiduData.all.qoq === 'number' ? `${Math.abs(baiduData[item.label].yoy)}%` : '暂缺'}</Typography>
-                      <img height="16px" width="10px" src={typeof baiduData.all.qoq === 'number' ? baiduData[item.label].yoy > 0 ? upIcon : downIcon : ''} />
-                    </div>
-                  </div>
-                  <div className={classes.row} style={{ justifyContent: 'center' }}>
-                    <Typography variant="body2">环比:</Typography>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography variant="body2" align="right" style={{ width: '2rem' }}>{typeof baiduData.all.qoq === 'number' ? `${Math.abs(baiduData[item.label].qoq)}%` : '暂缺'}</Typography>
-                      <img height="16px" width="10px" src={typeof baiduData.all.qoq === 'number' ? baiduData[item.label].qoq > 0 ? upIcon : downIcon : ''} />
-                    </div>
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-        </Paper>
-        <Paper style={{ height: 400, width: '500px' }}>
-          <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
-            <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">竞品数据</Typography>
-          </div>
-          <Chart height={350} width={500} data={dv} forceFit scale={scale}>
-            <Legend />
-            <Axis name="月份" />
-            <Axis name="月均降雨量" />
-            <Tooltip />
-            <Geom
-              type="intervalStack"
-              position="月份*月均降雨量"
-              color={["name", name => {
-                return name === '电脑端' ? '#ff81a7' : '#47bafd'
-              }]}
-              style={{
-                stroke: "#fff",
-                lineWidth: 1
-              }}
-            />
-          </Chart>
-        </Paper>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', height: '900px' }}>
-        <Paper style={{ height: 300, width: '100%', marginBottom: '40px' }}>
-          <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
-            <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">类型分析</Typography>
-          </div>
-          <Paper style={{ height: 250, width: '100%', marginBottom: '20px', boxShadow: 'none' }}>
-            <Table
-              rowCount={rows.length}
-              rowGetter={({ index }) => rows[index]}
-              columns={[
-                {
-                  width: 200,
-                  label: '类型',
-                  dataKey: 'name',
-                },
-                {
-                  width: 200,
-                  label: '平均热度',
-                  dataKey: 'avg',
-                },
-                {
-                  width: 200,
-                  label: '环比',
-                  dataKey: 'qoq',
-                },
-                {
-                  width: 200,
-                  label: '同比',
-                  dataKey: 'yoy',
-                },
-              ]}
-            />
-
-          </Paper>
-        </Paper>
-        <Paper style={{ height: 400, width: '400px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%',justifyContent:'center' }}>
+          <Paper style={{ height: 300, width: '500px', marginBottom: '40px' }}>
             <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
-              <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">性别比例</Typography>
+              <img src={IndexIcon} width="24px" style={{ marginRight: '5px' }} />
+              <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">热度分析</Typography>
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', height: '100%' }}>
-              {pieDataDvs.map((d: any, index: number) => <Chart
-                key={index}
-                height={120}
-                width={120}
-                data={d}
-                scale={cols}
-                padding={[0, 0, 0, 0]}
-                forceFit
-              >
-                <Coord type="theta" radius={0.75} />
-                <Axis name="percent" />
+            <div className={classes.row} style={{ justifyContent: 'center', marginTop: '50px' }}>
+              {[{ title: '总体热度', label: 'all' }, { title: '移动端', label: 'wise' }, { title: '电脑端', label: 'pc' }].map(item =>
+                (
+                  <div className={classes.column} style={{ width: '120px', marginRight: '20px' }}>
+                    <Fab className={classes.fab} color="primary">
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant="body1">{item.title}</Typography>
+                        <Typography style={{ fontWeight: 'bolder' }} variant="h5">{baiduData[item.label].avg}</Typography>
+                      </div>
+                    </Fab>
+                    <div className={classes.row} style={{ justifyContent: 'center' }}>
+                      <Typography variant="body2">同比:</Typography>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="body2" align="right" style={{ width: '2rem' }}>{typeof baiduData.all.qoq === 'number' ? `${Math.abs(baiduData[item.label].yoy)}%` : '暂缺'}</Typography>
+                        <img height="16px" width="10px" src={typeof baiduData.all.qoq === 'number' ? baiduData[item.label].yoy > 0 ? upIcon : downIcon : ''} />
+                      </div>
+                    </div>
+                    <div className={classes.row} style={{ justifyContent: 'center' }}>
+                      <Typography variant="body2">环比:</Typography>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="body2" align="right" style={{ width: '2rem' }}>{typeof baiduData.all.qoq === 'number' ? `${Math.abs(baiduData[item.label].qoq)}%` : '暂缺'}</Typography>
+                        <img height="16px" width="10px" src={typeof baiduData.all.qoq === 'number' ? baiduData[item.label].qoq > 0 ? upIcon : downIcon : ''} />
+                      </div>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </Paper>
+          <Paper style={{ height: 400, width: '500px' }}>
+            <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
+              <img src={CompetitionIcon} width="24px" style={{ marginRight: '5px' }} />
+              <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">竞品数据</Typography>
+            </div>
+            <Chart height={350} width={500} data={dv} forceFit scale={scale}>
+              <Legend />
+              <Axis name="月份" />
+              <Axis name="月均降雨量" />
+              <Tooltip />
+              <Geom
+                type="intervalStack"
+                position="月份*月均降雨量"
+                color={["name", name => {
+                  return name === '电脑端' ? '#ff81a7' : '#47bafd'
+                }]}
+                style={{
+                  stroke: "#fff",
+                  lineWidth: 1
+                }}
+              />
+            </Chart>
+          </Paper>
+        </div>
 
-                <Tooltip
-                  showTitle={false}
-                  itemTpl="<li><span style=&quot;background-color:{color};&quot; class=&quot;g2-tooltip-marker&quot;></span>{name}: {value}</li>"
-                />
-                <Geom
-                  type="intervalStack"
-                  position="percent"
-                  color={['item', item => {
-                    return item === '女' ? '#ff81a7' : '#47bafd'
-                  }]}
-                  tooltip={[
-                    "item*percent",
-                    (item, percent) => {
-                      percent = percent * 100 + "%";
-                      return {
-                        name: item,
-                        value: percent
-                      };
-                    }
-                  ]}
-                  style={{
-                    lineWidth: 1,
-                    stroke: "#fff"
-                  }}
+        <div style={{ display: 'flex', flexDirection: 'column', height: '800px' }}>
+          <Paper style={{ height: 300, width: '100%', marginBottom: '40px' }}>
+            <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
+              <img src={TypeIcon} width="24px" style={{ marginRight: '5px' }} />
+              <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">类型分析</Typography>
+            </div>
+            <Paper style={{ height: 250, width: '100%', marginBottom: '20px', boxShadow: 'none' }}>
+              <Table
+                rowCount={rows.length}
+                rowGetter={({ index }) => rows[index]}
+                columns={[
+                  {
+                    width: 100,
+                    label: '类型',
+                    dataKey: 'name',
+                  },
+                  {
+                    width: 100,
+                    label: '平均热度',
+                    dataKey: 'avg',
+                  },
+                  {
+                    width: 100,
+                    label: '环比',
+                    dataKey: 'qoq',
+                  },
+                  {
+                    width: 100,
+                    label: '同比',
+                    dataKey: 'yoy',
+                  },
+                ]}
+              />
+
+            </Paper>
+          </Paper>
+          <Paper style={{ height: 400, width: '400px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'center' }}>
+              <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
+                <img src={GenderIcon} width="24px" style={{ marginRight: '5px' }} />
+                <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">性别比例</Typography>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', height: '100%', justifyContent: 'center' }}>
+                {pieDataDvs.map((d: any, index: number) => <Chart
+                  key={index}
+                  height={120}
+                  width={120}
+                  data={d}
+                  scale={cols}
+                  padding={[0, 0, 0, 0]}
+                  forceFit
                 >
-                  <Typography style={{ width: '100%', textAlign: 'center' }}>{d.origin[0].name}</Typography>
-                </Geom>
-              </Chart>)}</div>
-          </div>
-        </Paper>
+                  <Coord type="theta" radius={0.75} />
+                  <Axis name="percent" />
+
+                  <Tooltip
+                    showTitle={false}
+                    itemTpl="<li><span style=&quot;background-color:{color};&quot; class=&quot;g2-tooltip-marker&quot;></span>{name}: {value}</li>"
+                  />
+                  <Geom
+                    type="intervalStack"
+                    position="percent"
+                    color={['item', item => {
+                      return item === '女' ? '#ff81a7' : '#47bafd'
+                    }]}
+                    tooltip={[
+                      "item*percent",
+                      (item, percent) => {
+                        percent = percent * 100 + "%";
+                        return {
+                          name: item,
+                          value: percent
+                        };
+                      }
+                    ]}
+                    style={{
+                      lineWidth: 1,
+                      stroke: "#fff"
+                    }}
+                  >
+                    <Typography style={{ width: '100%', textAlign: 'center' }}>{d.origin[0].name}</Typography>
+                  </Geom>
+                </Chart>)}</div>
+            </div>
+          </Paper>
+        </div>
+
       </div>
 
-    </div>}
-    {data.wordcloud && <img height="400px" width="800px" src={data.wordcloud} style={{ alignSelf: 'center' }} />}
+    </>}
+
+    {data.wordcloud &&
+      <Paper style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+        <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
+          <img src={TipIcon} width="24px" style={{ marginRight: '5px' }} />
+          <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">关键词</Typography>
+        </div>
+        <img height="400px" width="800px" src={data.wordcloud} style={{ alignSelf: 'center', marginTop: '50px', marginBottom: '50px' }} />
+      </Paper>}
   </div>)
 }

@@ -6,7 +6,7 @@ declare module '@giligili' {
     wordcloud: string
     news: INews[]
     competitors: Array<{ name: string, _id: string, baiduIndex: IBaiduData }>
-    score: Array<{ real_score: number, full_score: number, website: string }>
+    score: Array<{ real_score: number, full_score: number, website: string, comment: string }>
     baiduData: IBaiduData
     trend: ITrend[]
   }

@@ -37,7 +37,8 @@ const useStyles = makeStyles(
       fontSize: '14px'
     },
     media: {
-      width: '300px'
+      width: '300px',
+      minWidth: '300px'
     },
     content: {
       maxHeight: '140px'
@@ -70,7 +71,7 @@ export default ({ item }: Props) => {
               <Typography gutterBottom variant="h5" component="h2">
                 {item.title}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
+              <Typography style={{maxHeight: '60px', overflow: 'hidden'}} variant="body2" color="textSecondary" component="p">
                 {item.abstract}
               </Typography>
             </CardContent>

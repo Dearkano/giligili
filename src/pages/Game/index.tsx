@@ -16,7 +16,9 @@ import News from './News'
 import { searchGameById } from '@/services/search'
 import Data from './Data'
 import Paper from '@material-ui/core/Paper'
-
+import IntroIcon from '@/assets/游戏简介.png'
+import MesIcon from '@/assets/游戏信息.png'
+import BotImg from '@/assets/bot.png'
 interface Props {
   id: string
 }
@@ -55,6 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 )
+//
 
 export default ({ id }: Props) => {
   useEffect(() => {
@@ -79,8 +82,8 @@ export default ({ id }: Props) => {
       <Paper className={classes.body}>
         <Header item={data} />
 
-        <div className={classes.row}>
-          <Tabs value={value} onChange={handleChange}>
+        <div className={classes.row} style={{ justifyContent: 'center' }}>
+          <Tabs value={value} onChange={handleChange} >
             <Tab label="概览" icon={<IconButton><img style={{ width: '20px' }} src={Icon1} /></IconButton>} />
             <Tab label="资讯" icon={<IconButton><img style={{ width: '20px' }} src={Icon2} /></IconButton>} />
             <Tab label="数据分析" icon={<IconButton><img style={{ width: '20px' }} src={Icon3} /></IconButton>} />
@@ -88,12 +91,17 @@ export default ({ id }: Props) => {
         </div>
 
         {value === 0 && <>
+          <div style={{ paddingLeft: '30px', marginTop: '30px'}} className={classes.row}>
+            <img src={MesIcon} width="24px" style={{ marginRight: '5px' }} />
+            <Typography style={{fontWeight: 'bolder'}} variant="h5" color="primary">游戏信息</Typography>
+          </div>
           <div className={classes.row}>
             <Carousel imgUrl={tgbusData.imgUrl} />
             <Information data={data} />
           </div>
           <div style={{ paddingLeft: '30px', paddingTop: '20px' }} className={classes.row}>
-            <Typography variant="h5" color="primary">游戏简介</Typography>
+            <img src={IntroIcon} width="24px" style={{ marginRight: '5px' }} />
+            <Typography  style={{fontWeight: 'bolder'}} variant="h5" color="primary">游戏简介</Typography>
           </div>
           <div style={{ paddingLeft: '30px', paddingTop: '20px' }}>
             <Typography variant="body2" style={{ lineHeight: '25px', textIndent: '28px', opacity: 0.8 }}>
@@ -111,6 +119,7 @@ export default ({ id }: Props) => {
           </>
         }
       </Paper>
+      <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '50px' }}><img width="300px" height="56px" src={BotImg} /></div>
     </div>
   )
 }

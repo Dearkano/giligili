@@ -6,6 +6,7 @@ import Home from '@/pages/Home'
 import Search from '@/pages/Search'
 import Game from '@/pages/Game'
 
+
 export const Route: React.FC<
   RouteComponentProps & {
     // @types/react 里 createElement 签名很混乱
@@ -23,6 +24,7 @@ export interface ILocation {
 }
 
 const MyRouter: React.FC<ILocation> = ({ location }) => (
+  <>
   <Router location={location}>
     <Route path="/" component={Home} />
     <Route path="/search/word/:word" component={Search} />
@@ -31,6 +33,7 @@ const MyRouter: React.FC<ILocation> = ({ location }) => (
     <Route path="/search/mode/:mode" component={Search} />
     <Route path="/game/:id" component={Game} />
   </Router>
+  </>
 )
 
 export default React.memo(({ location }: ILocation) => <MyRouter location={location} />)

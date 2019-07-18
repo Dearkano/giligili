@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       marginTop: '25px',
       height: '280px',
-      boxShadow: 'none'
+      boxShadow: 'none',
+      width: '100%'
     },
     details: {
       display: 'flex',

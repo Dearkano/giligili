@@ -6,7 +6,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import { IData } from '@giligili'
-
+import Paper from '@material-ui/core/Paper'
+import ScoreIcon from '@/assets/评分分析.png'
 interface TabContainerProps {
   children?: React.ReactNode;
 }
@@ -30,15 +31,19 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       marginTop: ' 30px',
       backgroundColor: '#fff',
-      marginBottom: '30px',
-      boxShadow: 'none'
+      marginBottom: '30px'
     },
     tabs: {
       boxShadow: 'none'
     },
     appbar: {
       boxShadow: 'none'
-    }
+    },
+    row: {
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+    },
   }),
 );
 
@@ -56,8 +61,12 @@ export default ({ data }: Props) => {
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar className={classes.appbar} position="static" color="default">
+    <Paper className={classes.root}>
+        <div style={{ paddingLeft: '30px', paddingTop: '20px',marginBottom: '20px' }} className={classes.row}>
+        <img src={ScoreIcon} width="24px" style={{marginRight: '5px'}} />
+          <Typography style={{ fontWeight: 'bolder' }} variant="h5" color="primary">评分分析</Typography>
+        </div>
+      <AppBar className={classes.appbar} position="static" color="#fff">
         <Tabs
           className={classes.tabs}
           value={value}
@@ -67,22 +76,18 @@ export default ({ data }: Props) => {
           variant="scrollable"
           scrollButtons="auto"
         >
-          {score.map(item => (
-            <Tab label={<div style={{ display: 'flex', flexDirection: 'column' }}>
+          {score.map((item, index) => (
+            <Tab value={index} label={<div style={{ display: 'flex', flexDirection: 'column' }}>
 
-              <div style={{display:'flex',alignItems:'flex-end',fontWeight: 'bolder'}}><Typography variant="h6">{item.real_score}</Typography><sub style={{fontSize: '10px'}}>/{item.full_score}</sub></div>
+              <div style={{ display: 'flex', alignItems: 'flex-end', fontWeight: 'bolder' }}><Typography variant="h6">{item.real_score}</Typography><sub style={{ fontSize: '10px' }}>/{item.full_score}</sub></div>
               <div>{item.website}</div>
             </div>}></Tab>
           ))}
         </Tabs>
       </AppBar>
-      {value === 0 && <TabContainer>Item One</TabContainer>}
-      {value === 1 && <TabContainer>Item Two</TabContainer>}
-      {value === 2 && <TabContainer>Item Three</TabContainer>}
-      {value === 3 && <TabContainer>Item Four</TabContainer>}
-      {value === 4 && <TabContainer>Item Five</TabContainer>}
-      {value === 5 && <TabContainer>Item Six</TabContainer>}
-      {value === 6 && <TabContainer>Item Seven</TabContainer>}
-    </div>
+      {score.map((item, index) => (value === index &&   <div><TabContainer>
+          <Typography style={{ textIndent: '24px', opacity: 0.54 }} variant="body2">{item.comment}</Typography>
+      </TabContainer></div>))}
+    </Paper>
   );
 }

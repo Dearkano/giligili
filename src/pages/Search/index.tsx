@@ -22,7 +22,7 @@ import Icon3 from '@/assets/up.png'
 import Icon4 from '@/assets/down.png'
 import BlankImg from '@/assets/blank.png'
 import Loading from '@/components/LoadingCircle'
-
+import BotImg from '@/assets/bot.png'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     row: {
@@ -223,7 +223,7 @@ export default ({ word, type, theme, mode }: Props) => {
   const [timeExpand, setTimeExpand] = useState(false)
   const [modeExpand, setModeExpand] = useState(false)
   const [expand, setExpand] = useState(false)
-  return (<div className={classes.column}>
+  return (<div className={classes.column} style={{marginTop: '30px'}}>
 
     <div className={classes.row} style={{ justifyContent: 'center' }}>
       <img onClick={() => {
@@ -231,7 +231,7 @@ export default ({ word, type, theme, mode }: Props) => {
         navigate('/'
         )
       }} width="200px" style={{ marginRight: '20px', marginTop: '15px', cursor: 'pointer' }} src={logo} />
-      <Search />
+      <Search position="list" />
     </div>
 
     <div className={classes.row} style={{ marginTop: '20px', marginBottom: '20px', justifyContent: 'center' }}>
@@ -319,7 +319,7 @@ export default ({ word, type, theme, mode }: Props) => {
         </div>}
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        {!modeExpand && <div className={classes.select}>
+     <div className={classes.select}>
           {['大型多人在线', '多人', '分屏', '网页游戏', '单人', '合作'].map(item => (
             <div style={{ display: 'flex' }} onClick={() => handleModeCheck(modeChecked === item ? '' : item)}>
               {modeChecked !== item && <StyledRate color="primary">{item}</StyledRate>}
@@ -327,7 +327,7 @@ export default ({ word, type, theme, mode }: Props) => {
               <div style={{ width: '20px' }}></div>
             </div>
           ))}
-        </div>}
+        </div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
 
@@ -373,6 +373,7 @@ export default ({ word, type, theme, mode }: Props) => {
       offset={(page - 1) * 10}
       total={s.totalElements}
       onClick={(e, offset) => handleClick(offset)}
+      currentPageColor="default"
     />
 
     {expand && (
@@ -391,6 +392,6 @@ export default ({ word, type, theme, mode }: Props) => {
     <FixFab onClick={() => setExpand(!expand)}>
       <img width="40px" style={{ paddingTop: '5px' }} src={Icon1} />
     </FixFab>
-
+    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '50px' }}><img width="300px" height="56px" src={BotImg} /></div>
   </div>)
 }

@@ -10,18 +10,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Search from '@/components/Search'
 import useModel from '@/hooks/useModel'
 import State from '@/models/state'
-import logo from '@/assets/logo.png'
+import logo from '@/assets/giligili_white.png'
 import { Link } from '@reach/router'
-import TypeIcon from '@/assets/type.png'
-import ThemeIcon from '@/assets/theme.png'
-import ModeIcon from '@/assets/mode.png'
+import TypeIcon from '@/assets/type_white.png'
+import ThemeIcon from '@/assets/theme_white.png'
+import ModeIcon from '@/assets/mode_white.png'
 import { navigate } from '@reach/router'
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      borderBottom: '#eaeaea solid 1px'
+      boxShadow: '0px 0px 0px 0px rgba(0,0,0,0.2), 0px 0px 0px 0px rgba(0,0,0,0.14), 0px 12px 4px -8px rgba(0,0,0,0.12)',
+      height: '6.5vh',
+      minHeight: '64px'
     },
     grow: {
       flexGrow: 1,
@@ -30,7 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     appBar: {
-      backgroundColor: 'white',
       boxShadow: 'none'
     },
     button: {
@@ -38,11 +40,15 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 'bold'
     },
     text: {
-      fontSize: '14px'
+      fontSize: '14px',
     },
     row: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      color: '#fff'
+    },
+    title:{
+      color: '#fff'
     }
   })
 )
@@ -116,7 +122,7 @@ export default () => {
   }
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default" className={classes.appBar}>
+      <AppBar position="static" color="primary" className={classes.appBar}>
         <Toolbar>
           {needTopSearch && <img width="100px" style={{ cursor: 'pointer' }} src={logo} onClick={() => {
             State.clear()
@@ -131,7 +137,7 @@ export default () => {
             <div className={classes.row}>
               <Button className={classes.button} aria-controls="fade-menu-1" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'type')}>
                 <img width="20px" style={{ marginRight: '5px' }} src={TypeIcon} />
-                类型
+                <Typography className={classes.title}>类型</Typography>
            </Button>
             </div>
             <StyledMenu
@@ -150,7 +156,7 @@ export default () => {
             <div className={classes.row}>
               <Button className={classes.button} aria-controls="fade-menu-3" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'theme')}>
                 <img width="20px" style={{ marginRight: '5px' }} src={ThemeIcon} />
-                主题
+                <Typography className={classes.title}>主题</Typography>
            </Button>
             </div>
             <StyledMenu
@@ -169,7 +175,7 @@ export default () => {
             <div className={classes.row}>
               <Button className={classes.button} aria-controls="fade-menu-4" aria-haspopup="true" color="primary" onClick={e => handleClick(e, 'mode')}>
                 <img width="20px" style={{ marginRight: '5px' }} src={ModeIcon} />
-                模式
+                <Typography className={classes.title}>模式</Typography>
            </Button>
             </div>
             <StyledMenu

@@ -55,6 +55,29 @@ const useStyles = makeStyles((theme: Theme) =>
       color: 'inherit',
       flex: 1
     },
+    inputInputWhite: {
+      padding: theme.spacing(1, 1, 1, 3),
+      transition: theme.transitions.create('width'),
+      lineHeight: '34px',
+      width: '100%',
+      [theme.breakpoints.up('md')]: {
+        width: 200,
+      },
+      '&::placeholder': {
+        color: '#fff',
+        opacity: 0.8
+      },
+      color: '#fff'
+    },
+    iconButton: {
+      padding: 10,
+    },
+    icon: {
+      color: 'rgba(0,0,0,0.8)'
+    },
+    iconWhite: {
+      color: "#fff"
+    },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 3),
       transition: theme.transitions.create('width'),
@@ -64,18 +87,16 @@ const useStyles = makeStyles((theme: Theme) =>
         width: 200,
       },
     },
-    iconButton: {
-      padding: 10,
-    },
   })
 )
 
 interface Props {
   height?: number
   width?: number
+  position?: string
 }
 
-export default ({ height, width }: Props) => {
+export default ({ height, width, position }: Props) => {
   const classes = useStyles();
   const s = useModel(state)
   const onKeyDown = (e: any) => {
@@ -109,7 +130,7 @@ export default ({ height, width }: Props) => {
         placeholder="探寻游戏之美…"
         classes={{
           root: classes.inputRoot,
-          input: classes.inputInput,
+          input: position === 'list' ? classes.inputInput: classes.inputInputWhite,
         }}
         inputProps={{ 'aria-label': 'Search' }}
         onChange={handleChange}
@@ -117,7 +138,7 @@ export default ({ height, width }: Props) => {
         value={s.word}
       />
       <IconButton onClick={submit} className={classes.iconButton} aria-label="Search">
-        <SearchIcon />
+        <SearchIcon className={position === 'list' ? classes.icon : classes.iconWhite} />
       </IconButton>
     </div>)
 }

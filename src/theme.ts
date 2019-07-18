@@ -4,7 +4,7 @@ import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme'
 import blue from '@material-ui/core/colors/blue'
 import pink from '@material-ui/core/colors/pink'
 import green from '@material-ui/core/colors/lightGreen'
-import purple from '@material-ui/core/colors/purple'
+
 
 // https://material.io/tools/color/#!/?view.left=0&view.right=0
 
@@ -67,10 +67,13 @@ const greenDark: ThemeOptions = {
 const defaultTheme: ThemeOptions = {
   palette: {
     primary: {
-      main: pink[200],
+      main: pink['300'],
       contrastText: '#fff',
     },
-    secondary: pink,
+    secondary: {
+      main: pink['300'],
+      contrastText: '#fff'
+    },
     common:{
       white: '#fff'
     }
