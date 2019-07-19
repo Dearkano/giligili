@@ -1,4 +1,4 @@
-## 基于Elastic Search的游戏垂直搜素引擎
+## giligili电子游戏知识服务系统
 [展示视频](https://www.bilibili.com/video/av59783743)
 
 * react (Hooks)
