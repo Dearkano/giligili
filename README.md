@@ -6,6 +6,9 @@
 * @reach/router
 * bizcharts
 
-* 后端基于Java springboot + mongodb + elastic search
+* 后端基于 java/springboot + mongodb
+* 搜索引擎 elastic search
+* 分词引擎 python/jieba
+* 爬虫组成 nodejs/crawler & python/scrapy
 
 ![](src/assets/readme.png)
