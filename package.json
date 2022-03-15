@@ -31,7 +31,7 @@
     "classnames": "^2.2.6",
     "cropperjs": "^1.5.1",
     "dayjs": "^1.8.10",
-    "lodash-es": "^4.17.11",
+    "lodash-es": "^4.17.21",
     "material-ui-flat-pagination": "^3.2.0",
     "react": "16.8.4",
     "react-dom": "16.8.4",
